@@ -77,6 +77,11 @@ a {
   width: 44px;
   height: 44px;
   border: 2px solid var(--ink);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brand:hover img {
+  transform: rotate(-8deg) scale(1.06);
 }
 
 .nav {
@@ -86,9 +91,25 @@ a {
   font-size: 0.95rem;
 }
 
-.nav a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.nav a {
+  position: relative;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav a:hover::after {
+  transform: scaleX(1);
 }
 
 .nav-toggle {
@@ -116,7 +137,17 @@ a {
   opacity: 0.18;
   pointer-events: none;
   transform: rotate(-8deg);
+  animation: stamp-drift 16s ease-in-out infinite;
 }
+
+.hero .wrap > * {
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero .kicker { animation-delay: 0.04s; }
+.hero h1 { animation-delay: 0.1s; }
+.hero p { animation-delay: 0.18s; }
+.hero-actions { animation-delay: 0.26s; }
 
 .kicker {
   display: inline-block;
@@ -162,11 +193,21 @@ a {
   background: var(--ink);
   color: var(--acid);
   cursor: pointer;
+  transition:
+    background 0.28s ease,
+    color 0.28s ease,
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s ease;
 }
 
 .btn:hover {
   background: transparent;
   color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
 }
 
 .btn.ghost {
@@ -272,6 +313,12 @@ h2 {
   background: var(--ink-2);
   border: 1px solid var(--line);
   padding: 28px;
+  transition: border-color 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-card:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
 }
 
 .about-card h3 {
@@ -311,12 +358,25 @@ h2 {
   background: var(--ink-2);
   border: 1px solid var(--line-strong);
   padding: 28px;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.featured-card:hover {
+  border-color: rgba(200, 255, 0, 0.35);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 .featured-card img {
   width: 160px;
   height: 160px;
   border-radius: 28px;
+  animation: icon-bob 4.2s ease-in-out infinite;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s ease;
+}
+
+.featured-card:hover img {
+  transform: scale(1.05) rotate(-3deg);
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.45));
 }
 
 .featured-card h3 {
@@ -365,18 +425,39 @@ h2 {
   border: 1px solid var(--line);
   padding: 16px;
   min-height: 100%;
-  transition: border-color 0.15s ease, transform 0.15s ease;
+  transition:
+    border-color 0.35s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s ease,
+    box-shadow 0.4s ease;
 }
 
 .game:hover {
   border-color: var(--acid);
-  transform: translateY(-2px);
+  transform: translateY(-6px);
+  background: #181810;
+  box-shadow: 0 14px 28px rgba(200, 255, 0, 0.08);
 }
 
 .game img {
   width: 72px;
   height: 72px;
   border-radius: 16px;
+  animation: icon-bob 3.8s ease-in-out infinite;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+}
+
+.game:nth-child(2) img { animation-delay: -0.45s; }
+.game:nth-child(3) img { animation-delay: -0.9s; }
+.game:nth-child(4) img { animation-delay: -1.35s; }
+.game:nth-child(5) img { animation-delay: -1.8s; }
+.game:nth-child(6) img { animation-delay: -2.25s; }
+.game:nth-child(7) img { animation-delay: -2.7s; }
+.game:nth-child(8) img { animation-delay: -3.15s; }
+
+.game:hover img {
+  transform: scale(1.1) rotate(-5deg);
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.4));
 }
 
 .game h3 {
@@ -417,11 +498,13 @@ h2 {
   font-weight: 700;
   color: var(--acid);
   letter-spacing: -0.03em;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .mail:hover {
   text-decoration: underline;
   text-underline-offset: 5px;
+  transform: translateX(3px);
 }
 
 form {
@@ -648,12 +731,41 @@ textarea {
   }
 }
 
+@keyframes icon-bob {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -5px; }
+}
+
+@keyframes stamp-drift {
+  0%, 100% { transform: rotate(-8deg) translateY(0); }
+  50% { transform: rotate(-5.5deg) translateY(-14px); }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  .game {
-    transition: none;
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .hero .wrap > * {
+    opacity: 1;
+    transform: none;
   }
 }
